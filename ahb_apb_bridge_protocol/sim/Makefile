@@ -1,7 +1,6 @@
 #Makefile for UVM Testbench - Lab 10
 
 # SIMULATOR = Questa for Mentor's Questasim
-# SIMULATOR = VCS for Synopsys's VCS
 
 SIMULATOR = Questa
 
@@ -170,99 +169,3 @@ clean_Questa:
 	clear
 
 # ----------------------------- End of Definitions for Mentor's Questa Specific Targets -------------------------------#
-
-# ----------------------------- Start of Definitions for Synopsys's VCS Specific Targets -------------------------------#
-
-sv_cmp_VCS:
-	vcs -l vcs.log -timescale=1ns/1ps -sverilog -ntb_opts uvm -debug_access+all -full64 -kdb  -lca -P $(FSDB_PATH)/novas.tab $(FSDB_PATH)/pli.a $(RTL) $(INC) $(SVTB2) $(SVTB1)
-		      
-run_test_VCS: sv_cmp_VCS
-	./simv -a vcs.log +fsdbfile+wave.fsdb -cm_dir ./mem_cov0 +ntb_random_seed_automatic +UVM_TESTNAME=base_test 
-	urg -dir mem_cov0.vdb -format both -report urgReport0
-	
-run_test1_VCS: sv_cmp_VCS
-	./simv -a vcs.log +fsdbfile+wave1.fsdb -cm_dir ./mem_cov1 +ntb_random_seed_automatic +UVM_TESTNAME=single_wr_test 
-	urg -dir mem_cov1.vdb -format both -report urgReport1
-	
-run_test2_VCS: sv_cmp_VCS
-	./simv -a vcs.log +fsdbfile+wave2.fsdb -cm_dir ./mem_cov2 +ntb_random_seed_automatic +UVM_TESTNAME=unspecified_rd_test 
-	urg -dir mem_cov2.vdb -format both -report urgReport2
-	
-run_test3_VCS: sv_cmp_VCS
-	./simv -a vcs.log +fsdbfile+wave3.fsdb -cm_dir ./mem_cov3 +ntb_random_seed_automatic +UVM_TESTNAME=incr4_wr_test 
-	urg -dir mem_cov3.vdb -format both -report urgReport3
-	
-run_test4_VCS: sv_cmp_VCS
-	./simv -a vcs.log +fsdbfile+wave4.fsdb -cm_dir ./mem_cov4 +ntb_random_seed_automatic +UVM_TESTNAME=incr8_wr_test 
-	urg -dir mem_cov4.vdb -format both -report urgReport4
-
-run_test5_VCS: sv_cmp_VCS
-	./simv -a vcs.log +fsdbfile+wave5.fsdb -cm_dir ./mem_cov5 +ntb_random_seed_automatic +UVM_TESTNAME=incr16_wr_test 
-	urg -dir mem_cov5.vdb -format both -report urgReport5
-	
-run_test6_VCS: sv_cmp_VCS
-	./simv -a vcs.log +fsdbfile+wave6.fsdb -cm_dir ./mem_cov6 +ntb_random_seed_automatic +UVM_TESTNAME=wrap4_wr_test 
-	urg -dir mem_cov6.vdb -format both -report urgReport6
-	
-run_test7_VCS: sv_cmp_VCS
-	./simv -a vcs.log +fsdbfile+wave7.fsdb -cm_dir ./mem_cov7 +ntb_random_seed_automatic +UVM_TESTNAME=wrap8_wr_test 
-	urg -dir mem_cov7.vdb -format both -report urgReport7
-	
-run_test8_VCS: sv_cmp_VCS
-	./simv -a vcs.log +fsdbfile+wave8.fsdb -cm_dir ./mem_cov8 +ntb_random_seed_automatic +UVM_TESTNAME=wrap16_wr_test 
-	urg -dir mem_cov8.vdb -format both -report urgReport8
-
-run_test9_VCS: sv_cmp_VCS
-	./simv -a vcs.log +fsdbfile+wave9.fsdb -cm_dir ./mem_cov9 +ntb_random_seed_automatic +UVM_TESTNAME=seq_lib_test 
-	urg -dir mem_cov9.vdb -format both -report urgReport9
-
-#run_test10_VCS: sv_cmp_VCS
-#	./simv -a vcs.log +fsdbfile+wave10.fsdb -cm_dir ./mem_cov10 +ntb_random_seed_automatic +UVM_TESTNAME=wrap16_wr_test 
-#	urg -dir mem_cov10.vdb -format both -report urgReport10
-
-view_wave_VCS: 
-	verdi -ssf wave.fsdb
-
-view_wave1_VCS: 
-	verdi -ssf wave1.fsdb
-	
-view_wave2_VCS: 
-	verdi -ssf wave2.fsdb
-
-view_wave3_VCS: 
-	verdi -ssf wave3.fsdb
-
-view_wave4_VCS: 
-	verdi -ssf wave4.fsdb		
-	
-view_wave5_VCS: 
-	verdi -ssf wave5.fsdb
-
-view_wave6_VCS: 
-	verdi -ssf wave6.fsdb
-
-view_wave7_VCS: 
-	verdi -ssf wave7.fsdb
-
-view_wave8_VCS: 
-	verdi -ssf wave8.fsdb
-
-view_wave9_VCS: 
-	verdi -ssf wave9.fsdb
-
-view_wave10_VCS: 
-	verdi -ssf wave10.fsdb
-
-report_VCS:
-	urg -dir mem_cov9.vdb -dbname merged_dir/merged_test -format both -report urgReport
-
-regress_VCS: clean_VCS sv_cmp_VCS run_test_VCS run_test1_VCS run_test2_VCS run_test3_VCS run_test4_VCS run_test5_VCS run_test6_VCS run_test7_VCS run_test8_VCS report_VCS cov_VCS
-
-cov_VCS:
-	verdi -cov -covdir merged_dir.vdb
-
-clean_VCS:
-	rm -rf simv* csrc* *.tmp *.vpd *.vdb *.key *.log *hdrs.h urgReport* *.fsdb novas* verdi*
-	clear
-
-# ----------------------------- END of Definitions for Synopsys's VCS Specific Targets -------------------------------#
